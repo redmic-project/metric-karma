@@ -1,10 +1,15 @@
 version: '3.5'
 
 services:
-  unsee:
-    image: ${IMAGE_NAME:-cloudflare/unsee}:${IMAGE_TAG:-latest}
+  karma:
+    image: ${IMAGE_NAME:-lmierzwa/karma}:${IMAGE_TAG:-latest}
     environment:
+      HOST:
+      PORT:
       ALERTMANAGER_URI:
+      ALERTMANAGER_EXTERNAL_URI:
+      ALERTMANAGER_NAME:
+      ALERTMANAGER_TIMEOUT:
     networks:
       metric-net:
       traefik-net:
@@ -17,16 +22,16 @@ services:
         delay: ${UPDATE_DELAY:-1m}
       labels:
         traefik.frontend.auth.basic.users: ${UI_AUTH}
-        traefik.frontend.rule: Host:${TRAEFIK_SUBDOMAIN:-unsee}.${PUBLIC_HOSTNAME}
-        traefik.backend: unsee
-        traefik.port: '8080'
+        traefik.frontend.rule: Host:${TRAEFIK_SUBDOMAIN:-karma}.${PUBLIC_HOSTNAME}
+        traefik.backend: karma
+        traefik.port: '${PORT}'
       resources:
         limits:
           cpus: '${RESOURCES_LIMITS_CPUS:-0.1}'
-          memory: ${RESOURCES_LIMITS_MEMORY:-64M}
+          memory: ${RESOURCES_LIMITS_MEMORY:-128M}
         reservations:
           cpus: '${RESOURCES_RESERVATIONS_CPUS:-0.001}'
-          memory: ${RESOURCES_RESERVATIONS_MEMORY:-16M}
+          memory: ${RESOURCES_RESERVATIONS_MEMORY:-64M}
 
 networks:
   metric-net:

@@ -27,12 +27,15 @@ services:
       update_config:
         delay: ${UPDATE_DELAY:-1m}
       labels:
-        traefik.frontend.auth.basic.users: ${UI_AUTH}
-        traefik.frontend.rule: Host:${TRAEFIK_SUBDOMAIN:-karma}.${PUBLIC_HOSTNAME}
-        traefik.backend: karma
-        traefik.backend.healthcheck.path: ${TRAEFIK_HEALTHCHECK_PATH:-/health}
-        traefik.backend.healthcheck.interval: ${TRAEFIK_HEALTHCHECK_INTERVAL:-30s}
-        traefik.port: '${PORT}'
+        traefik.enable: ${TRAEFIK_ENABLE:-true}
+        traefik.http.routers.karma.entrypoints: ${TRAEFIK_ENTRYPOINT:-http}
+        traefik.http.routers.karma.rule: Host(`${TRAEFIK_SUBDOMAIN:-karma}.${PUBLIC_HOSTNAME}`)
+        traefik.http.middlewares.karma-auth.basicauth.users: ${TRAEFIK_AUTH}
+        traefik.http.routers.karma.middlewares: karma-auth
+        traefik.http.services.karma.loadbalancer.server.port: ${PORT}
+        traefik.http.services.karma.loadbalancer.healthcheck.path: ${TRAEFIK_HEALTHCHECK_PATH:-/health}
+        traefik.http.services.karma.loadbalancer.healthcheck.interval: ${TRAEFIK_HEALTHCHECK_INTERVAL:-30s}
+        traefik.http.services.karma.loadbalancer.healthcheck.headers.authorization: ${TRAEFIK_HEALTHCHECK_AUTH}
       resources:
         limits:
           cpus: '${RESOURCES_LIMITS_CPUS:-0.1}'

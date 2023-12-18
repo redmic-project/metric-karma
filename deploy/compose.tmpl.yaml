@@ -33,7 +33,6 @@ services:
         traefik.http.services.karma.loadbalancer.server.port: ${PORT}
         traefik.http.services.karma.loadbalancer.healthcheck.path: ${TRAEFIK_HEALTHCHECK_PATH:-/health}
         traefik.http.services.karma.loadbalancer.healthcheck.interval: ${TRAEFIK_HEALTHCHECK_INTERVAL:-30s}
-        traefik.http.services.karma.loadbalancer.healthcheck.headers.authorization: ${TRAEFIK_HEALTHCHECK_AUTH}
       resources:
         limits:
           cpus: '${RESOURCES_LIMITS_CPUS:-0.1}'

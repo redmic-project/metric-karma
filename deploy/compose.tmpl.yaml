@@ -1,5 +1,3 @@
-version: '3.5'
-
 services:
   karma:
     image: ${IMAGE_NAME:-ghcr.io/prymitive/karma}:${IMAGE_TAG:-latest}
